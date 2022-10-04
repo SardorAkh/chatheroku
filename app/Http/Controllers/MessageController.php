@@ -18,9 +18,10 @@ class MessageController extends Controller
     public function getMessages(Request $request): JsonResponse
     {
         $query = $request->query;
-        if($query->count() == 0)
-            return response()->json(Message::all());
-        $data = Message::where("id",">",$query->get("id"))->get();
+        if (!$query->has("id")) {
+            return response()->json(Message::with(["user"])->get());
+        }
+        $data = Message::with(["user"])->where("id",">",$query->get("id"))->get();
         return response()->json($data);
     }
     /**
@@ -40,7 +41,7 @@ class MessageController extends Controller
            "user_id" => $user_id
         ]);
 
-        return response()->json("OK");
+        return response()->json("", 204);
     }
     /**
      * Display the specified resource.

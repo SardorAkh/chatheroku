@@ -57,14 +57,4 @@ class AuthController extends Controller
             'message' => 'Logged out'
         ];
     }
-    public function setUserActiveState(Request $request): \Illuminate\Http\JsonResponse
-    {
-        $user_id = $request->json()->get("user_id");
-        $state = $request->json()->get("state");
-
-        $user = User::find($user_id);
-        $user->is_active = $state;
-
-        return response()->json("",204);
-    }
 }
