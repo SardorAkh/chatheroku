@@ -50,11 +50,12 @@ class AuthController extends Controller
         return response($response, 201);
     }
 
-    public function logout(Request $request): array
+    public function logout(Request $request): \Illuminate\Http\JsonResponse
     {
-        auth()->user()->tokens()->delete();
-        return [
-            'message' => 'Logged out'
-        ];
+        $user = User::find($request->query->get("user_id"));
+        $user->tokens()->delete();
+        $user->is_active = false;
+        $user->save();
+        return response()->json("", 204);
     }
 }
